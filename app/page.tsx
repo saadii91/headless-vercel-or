@@ -1,22 +1,20 @@
 import { Carousel } from 'components/carousel';
 import HomeCarousel from 'components/carousel-main';
-import { ThreeItemGrid } from 'components/grid/three-items';
+import { CollectionGrid } from 'components/collection-grid'; // Import UI
 import Footer from 'components/layout/footer';
-import { HOME_SLIDES } from 'lib/bigcommerce/constants';
+import { HOME_COLLECTIONS, HOME_SLIDES } from 'lib/bigcommerce/constants'; // Import Data
 import { Suspense } from 'react';
-
-export const runtime = 'edge';
 
 export default function HomePage() {
   return (
     <>
-      {/* 100/100 SPEED: No API calls, priority images load immediately */}
       <HomeCarousel slides={HOME_SLIDES} />
 
-      <ThreeItemGrid />
+      {/* New Collection Grid - Static & Instant */}
+      <CollectionGrid collections={HOME_COLLECTIONS} />
+
 
       <Suspense>
-        {/* The bottom product carousel still uses the standard BC fetch */}
         <Carousel />
         <Suspense>
           <Footer />
