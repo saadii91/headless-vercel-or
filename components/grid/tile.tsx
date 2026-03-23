@@ -35,7 +35,6 @@ export function GridTileImage({
             })}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
-            alt={props.alt || label?.title || 'Product image'}
             {...props}
           />
         ) : (
