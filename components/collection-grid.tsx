@@ -6,7 +6,7 @@ export function CollectionGrid({ collections }: { collections: any[] }) {
 
     return (
         <section className="mx-auto max-w-screen-2xl px-4 py-10 md:py-16">
-            <h2 className="mb-8 text-center text-3xl font-extrabold tracking-tight text-black md:mb-12 md:text-5xl">
+            <h2 className="mb-8 text-center text-3xl font-extrabold tracking-tight md:mb-12 md:text-5xl text-[#285e2c]">
                 Explore Our Nursery
             </h2>
 

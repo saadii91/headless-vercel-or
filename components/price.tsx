@@ -2,7 +2,6 @@ const Price = ({
   amount,
   className,
   currencyCode = 'USD',
-  currencyCodeClassName
 }: {
   amount: string;
   className?: string;
@@ -10,20 +9,20 @@ const Price = ({
   currencyCodeClassName?: string;
 } & React.ComponentProps<'p'>) => {
 
+  // Create a reusable formatter to keep code clean
+  const formatter = new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency: currencyCode,
+    currencyDisplay: 'narrowSymbol'
+  });
 
   if (amount.includes('-')) {
     const [min, max] = amount.split('-').map(p => p.trim());
+
+    // Using ?? '0' tells TypeScript: "If min/max is undefined, use '0'"
     return (
       <p suppressHydrationWarning={true} className={className}>
-        {`${new Intl.NumberFormat(undefined, {
-          style: 'currency',
-          currency: currencyCode,
-          currencyDisplay: 'narrowSymbol'
-        }).format(parseFloat(min))} - ${new Intl.NumberFormat(undefined, {
-          style: 'currency',
-          currency: currencyCode,
-          currencyDisplay: 'narrowSymbol'
-        }).format(parseFloat(max))}`}
+        {`${formatter.format(parseFloat(min ?? '0'))} - ${formatter.format(parseFloat(max ?? '0'))}`}
       </p>
     );
   }
@@ -31,11 +30,7 @@ const Price = ({
   // Default single price rendering
   return (
     <p suppressHydrationWarning={true} className={className}>
-      {`${new Intl.NumberFormat(undefined, {
-        style: 'currency',
-        currency: currencyCode,
-        currencyDisplay: 'narrowSymbol'
-      }).format(parseFloat(amount))}`}
+      {formatter.format(parseFloat(amount))}
     </p>
   );
 };

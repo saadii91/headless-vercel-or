@@ -28,7 +28,7 @@ export default async function FeaturedProducts({ productIds }: { productIds: num
                     <span className="text-[#3aae93] font-bold uppercase tracking-[0.3em] text-[10px] mb-2 block">
                         Handpicked for you
                     </span>
-                    <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-[#1b4332]">
+                    <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-[#285e2c]">
                         Featured Products
                     </h2>
                 </div>
