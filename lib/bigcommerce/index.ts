@@ -718,8 +718,7 @@ export async function getBlogPostsRest() {
       'X-Auth-Token': process.env.BIGCOMMERCE_ACCESS_TOKEN!
     },
     // This is the CRITICAL part for the "Refresh" issue:
-    cache: 'no-store',
-    next: { revalidate: 0 }
+    cache: 'no-store'
   });
 
   if (!res.ok) return [];

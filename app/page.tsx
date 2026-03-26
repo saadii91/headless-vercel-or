@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import HomeCarousel from 'components/carousel-main';
 import { CollectionGrid } from 'components/collection-grid';
 import FeaturedProducts from 'components/featured-products';
