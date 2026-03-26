@@ -1,11 +1,12 @@
-import { Carousel } from 'components/carousel';
 import HomeCarousel from 'components/carousel-main';
-import { CollectionGrid } from 'components/collection-grid'; // Import UI
-import Footer from 'components/layout/footer';
-import { HOME_COLLECTIONS, HOME_SLIDES } from 'lib/bigcommerce/constants'; // Import Data
+import { CollectionGrid } from 'components/collection-grid';
+import FeaturedProducts from 'components/featured-products';
+import BlogSection from 'components/home-blog-section';
+import QuickLinks from 'components/home-quicl-links';
+import { HOME_COLLECTIONS, HOME_SLIDES } from 'lib/bigcommerce/constants';
 import { Suspense } from 'react';
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <>
       <HomeCarousel slides={HOME_SLIDES} />
@@ -15,9 +16,10 @@ export default function HomePage() {
 
 
       <Suspense>
-        <Carousel />
+        <FeaturedProducts productIds={[116, 114, 124, 127]} />
         <Suspense>
-          <Footer />
+          <QuickLinks />
+          <BlogSection />
         </Suspense>
       </Suspense>
     </>

@@ -1,34 +1,39 @@
+import Footer from 'components/layout/footer';
 import Navbar from 'components/layout/navbar';
 import { ensureStartsWith } from 'lib/utils';
 import { Inter } from 'next/font/google';
 import { ReactNode, Suspense } from 'react';
 import './globals.css';
 
-const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
-const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-  : 'http://localhost:3000';
+const { TWITTER_CREATOR, TWITTER_SITE } = process.env;
+// Updated to your real domain
+const baseUrl = 'https://treenurseryco.com';
+
 const twitterCreator = TWITTER_CREATOR ? ensureStartsWith(TWITTER_CREATOR, '@') : undefined;
 const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : undefined;
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: SITE_NAME!,
-    template: `%s | ${SITE_NAME}`
+    default: 'Tree Nursery Co | Buy Trees, Shrubs & Plants Online',
+    template: `%s | Tree Nursery Co`
   },
+  description: 'Shop Tree Nursery Co for quality trees, shrubs, and plants shipped fresh to your door. Easy online ordering and trusted nursery expertise.',
   robots: {
     follow: true,
     index: true
   },
+  icons: {
+    icon: '/favicon.ico',
+  },
   ...(twitterCreator &&
     twitterSite && {
-      twitter: {
-        card: 'summary_large_image',
-        creator: twitterCreator,
-        site: twitterSite
-      }
-    })
+    twitter: {
+      card: 'summary_large_image',
+      creator: twitterCreator,
+      site: twitterSite
+    }
+  })
 };
 
 const inter = Inter({
@@ -40,11 +45,14 @@ const inter = Inter({
 export default async function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
+      <body className="flex min-h-screen flex-col bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
         <Navbar />
         <Suspense>
-          <main>{children}</main>
+          <main className="flex-grow">
+            {children}
+          </main>
         </Suspense>
+        <Footer />
       </body>
     </html>
   );

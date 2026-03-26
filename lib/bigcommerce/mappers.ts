@@ -53,11 +53,11 @@ const bigCommerceToVercelVariants = (
         name: option.displayName ?? '',
         value: option.values.edges.map(({ node }) => node.label)[0] ?? ''
       })) || [
-        {
-          name: '',
-          value: ''
-        }
-      ],
+          {
+            name: '',
+            value: ''
+          }
+        ],
       price: {
         amount:
           variant.prices?.price.value.toString() ||
@@ -84,9 +84,9 @@ const bigCommerceToVercelProduct = (product: BigCommerceProduct): VercelProduct 
     : [];
   const variants = product.variants.edges.length
     ? bigCommerceToVercelVariants(
-        product.variants.edges.map((item) => item.node),
-        product.entityId
-      )
+      product.variants.edges.map((item) => item.node),
+      product.entityId
+    )
     : [];
 
   return {
@@ -206,7 +206,7 @@ const bigCommerceToVercelCartItems = (
         cost: {
           totalAmount: {
             amount:
-            item.extendedListPrice.value.toString() || item.listPrice.value.toString() || '0',
+              item.extendedListPrice.value.toString() || item.listPrice.value.toString() || '0',
             currencyCode: item.extendedListPrice.currencyCode || item.listPrice.currencyCode || ''
           }
         },
@@ -330,4 +330,34 @@ export const bigCommerceToVercelPageContent = (page: BigCommercePage): VercelPag
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   };
+};
+
+
+
+
+
+export const mapBigCommerceBlogPosts = (posts: any[]) => {
+  const storeHash = process.env.BIGCOMMERCE_STORE_HASH;
+  return posts.map((post: any) => {
+    const path = post.thumbnail_path?.replace(/^\//, '').replace(/product_images\//g, '') || '';
+    const slug = post.url.replace(/^\/blog\//, '').replace(/\/$/, '');
+
+    return {
+      id: post.id,
+      title: post.title,
+      slug: slug,
+      publishedDate: post.published_date.date,
+      // Keep the summary cleanup but don't use it as the ONLY description
+      summary: post.summary.replace(/<[^>]*>?/gm, '').substring(0, 150) + '...',
+      body: post.body,
+      imageSources: [
+        `https://cdn11.bigcommerce.com/s-${storeHash}/images/stencil/640w/${path}`,
+        `https://cdn11.bigcommerce.com/s-${storeHash}/${path}`
+      ].filter(src => !src.endsWith('/')),
+
+      // --- ADD THESE TWO LINES ---
+      meta_title: post.meta_title || post.title,
+      meta_description: post.meta_description || ""
+    };
+  });
 };

@@ -4,11 +4,9 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// 1. IMPORT SLIDE NORMALLY (Standard Import)
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 
-// 2. DYNAMIC IMPORT ONLY THE MAIN CONTAINER
 const Swiper = dynamic(() => import('swiper/react').then((mod) => mod.Swiper), {
     ssr: false,
     loading: () => <div className="h-[50vh] w-full animate-pulse bg-gray-100 md:h-[70vh]" />,
@@ -23,6 +21,36 @@ export default function HomeCarousel({ slides }: { slides: any[] }) {
 
     return (
         <section className="relative block w-full bg-gray-100 h-[50vh] md:h-[70vh]">
+            {/* Custom CSS for White Arrows and Bullets with Mobile Hiding */}
+            <style jsx global>{`
+                /* Hide navigation and pagination on mobile by default */
+                .swiper-button-next, 
+                .swiper-button-prev, 
+                .swiper-pagination {
+                    display: none !important;
+                }
+
+                /* Show and style for desktop (md: 768px and up) */
+                @media (min-width: 768px) {
+                    .swiper-button-next, 
+                    .swiper-button-prev {
+                        display: flex !important;
+                        color: #ffffff !important;
+                    }
+                    .swiper-pagination {
+                        display: block !important;
+                    }
+                    .swiper-pagination-bullet {
+                        background: #ffffff !important;
+                        opacity: 0.6;
+                    }
+                    .swiper-pagination-bullet-active {
+                        background: #ffffff !important;
+                        opacity: 1;
+                    }
+                }
+            `}</style>
+
             <Swiper
                 modules={[Autoplay, Navigation, Pagination]}
                 navigation
@@ -32,7 +60,6 @@ export default function HomeCarousel({ slides }: { slides: any[] }) {
                 className="h-full w-full"
             >
                 {slides.map((slide, index) => (
-                    // Swiper needs these to be direct children of the Swiper component
                     <SwiperSlide key={index} className="h-full w-full">
                         <div className="relative h-full w-full">
                             <Image
@@ -44,13 +71,18 @@ export default function HomeCarousel({ slides }: { slides: any[] }) {
                                 sizes="100vw"
                                 quality={90}
                             />
-                            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/30 text-center text-white p-6">
-                                <h2 className="text-4xl font-bold md:text-6xl">{slide.title}</h2>
-                                <p className="mt-4 text-lg md:text-xl">{slide.description}</p>
+                            {/* Mobile-friendly padding and text sizing */}
+                            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 text-center text-white p-4 md:p-12">
+                                <h2 className="text-3xl font-bold leading-tight md:text-6xl max-w-[90%] md:max-w-4xl">
+                                    {slide.title}
+                                </h2>
+                                <p className="mt-3 text-base md:text-xl max-w-[85%] md:max-w-2xl opacity-90">
+                                    {slide.description}
+                                </p>
                                 {slide.buttonLink && (
                                     <Link
                                         href={slide.buttonLink}
-                                        className="mt-8 rounded-full bg-white px-8 py-3 text-sm font-bold text-black"
+                                        className="mt-6 md:mt-8 rounded-full bg-[#285e2c] px-6 py-2.5 md:px-10 md:py-4 text-sm font-bold text-white transition-all hover:bg-opacity-90 active:scale-95"
                                     >
                                         {slide.buttonText || 'Shop Now'}
                                     </Link>

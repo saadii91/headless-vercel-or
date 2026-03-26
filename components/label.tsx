@@ -3,12 +3,17 @@ import Price from './price';
 const Label = ({
   title,
   amount,
+  maxAmount,
   currencyCode
 }: {
   title: string;
   amount: string;
+  maxAmount?: string; // Add this
   currencyCode: string;
 }) => {
+  // Check if we should show a range
+  const isRange = maxAmount && parseFloat(maxAmount) > parseFloat(amount);
+
   return (
     <div className="flex w-full flex-col px-4 pb-4 pt-4 transition-all duration-500 ease-in-out group-hover:bg-[#285e2c]">
       <div className="flex flex-col w-full">
@@ -18,11 +23,21 @@ const Label = ({
           </p>
 
           <div className="flex-none rounded-md border border-neutral-100 bg-white px-2 py-0.5 transition-all duration-300 group-hover:border-white/20 group-hover:bg-[#285e2c]">
-            <Price
-              className="text-[#285e2c] text-xs font-black transition-colors duration-300 group-hover:text-white"
-              amount={amount}
-              currencyCode={currencyCode}
-            />
+            <div className="flex items-center gap-1 text-[#285e2c] text-xs font-black transition-colors duration-300 group-hover:text-white">
+              <Price
+                amount={amount}
+                currencyCode={currencyCode}
+              />
+              {isRange && (
+                <>
+                  <span>-</span>
+                  <Price
+                    amount={maxAmount}
+                    currencyCode={currencyCode}
+                  />
+                </>
+              )}
+            </div>
           </div>
         </div>
 

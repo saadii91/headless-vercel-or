@@ -71,7 +71,7 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
                   <XMarkIcon className="h-6" />
                 </button>
 
-                <div className="mb-4 w-full">
+                <div className="mb-4 w-full border-b border-neutral-200 pb-6 dark:border-neutral-800">
                   <Search />
                 </div>
                 {menu.length ? (

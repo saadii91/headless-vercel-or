@@ -1,58 +1,72 @@
 import Cart from 'components/cart';
-import OpenCart from 'components/cart/open-cart';
-import LogoSquare from 'components/logo-square';
 import { getMenu } from 'lib/bigcommerce';
-import { VercelMenu as Menu } from 'lib/bigcommerce/types';
 import Link from 'next/link';
-import { Suspense } from 'react';
 import MobileMenu from './mobile-menu';
 import Search from './search';
-const { SITE_NAME } = process.env;
 
 export default async function Navbar() {
   const menu = await getMenu('next-js-frontend-header-menu');
 
+  const customLinks = [
+    { title: 'Shipping Returns', path: '/shipping-returns/' },
+    { title: 'Contact Us', path: '/contact-us/' },
+    { title: 'Gardening Blog', path: '/blog' }
+  ];
+
+  const fullMenu = [...menu.slice(0, 8), ...customLinks];
+  const LOGO_URL = 'https://cdn11.bigcommerce.com/s-9nn6ejxj73/images/stencil/250x100/tn-logo-companyname_1769032683__71795.original.png';
+
   return (
-    <nav className="relative flex items-center justify-between p-4 lg:px-6">
-      <div className="block flex-none md:hidden">
-        <Suspense>
-          <MobileMenu menu={menu} />
-        </Suspense>
-      </div>
-      <div className="flex w-full items-center">
-        <div className="flex w-full md:w-1/3">
-          <Link href="/" className="mr-2 flex w-full items-center justify-center md:w-auto lg:mr-6">
-            <LogoSquare />
-            <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block">
-              {SITE_NAME}
+    <nav className="sticky top-0 z-40 border-b border-neutral-200 bg-white/80 backdrop-blur-md">
+      {/* MAIN HEADER ROW */}
+      <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-3 lg:px-6">
+        <div className="flex items-center gap-8">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="relative h-12 w-auto min-w-[120px] transition-transform group-hover:scale-105">
+              <img
+                src={LOGO_URL}
+                alt="TN Nursery Logo"
+                className="h-full w-auto object-contain object-left"
+              />
             </div>
           </Link>
-          {menu.length ? (
-            <ul className="hidden gap-6 text-sm md:flex md:items-center">
-              {menu.map((item: Menu) => (
-                <li key={item.title}>
-                  <Link
-                    href={item.path}
-                    className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
-                  >
-                    {item.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : null}
+
+          {/* NAV LINKS - Now they have more room */}
+          <ul className="hidden gap-6 text-[13px] font-bold lg:flex xl:gap-8">
+            {fullMenu.map((item) => (
+              <li key={item.title}>
+                <Link
+                  href={item.path}
+                  className="whitespace-nowrap text-neutral-600 transition-colors hover:text-[#285e2c]"
+                >
+                  {item.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
-        <div className="hidden justify-center md:flex md:w-1/3">
-          <Suspense>
+
+        {/* RIGHT SIDE ACTIONS */}
+        <div className="flex items-center gap-4 ml-auto">
+          {/* SEARCH COMPONENT (Desktop) */}
+          <div className="hidden lg:block">
             <Search />
-          </Suspense>
-        </div>
-        <div className="flex justify-end md:w-1/3">
-          <Suspense fallback={<OpenCart />}>
+          </div>
+
+          <div className="flex items-center gap-2">
             <Cart />
-          </Suspense>
+            <div className="lg:hidden">
+              <MobileMenu menu={fullMenu} />
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Note: If your <Search /> component contains the input field, 
+          it will likely need a small CSS tweak to position itself 
+          absolutely 'top-full' so it drops below this bar without 
+          pushing the layout.
+      */}
     </nav>
   );
 }

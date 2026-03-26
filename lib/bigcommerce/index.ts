@@ -2,6 +2,7 @@ import { isVercelCommerceError } from 'lib/type-guards';
 import { notFound } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
 import { BIGCOMMERCE_GRAPHQL_API_ENDPOINT } from './constants';
+import { mapBigCommerceBlogPosts } from './mappers';
 
 import {
   bigCommerceToVercelCart,
@@ -332,7 +333,7 @@ export async function removeFromCart(cartId: string, lineIds: string[]): Promise
 
   const cart = cartState!.body.data.cart.deleteCartLineItem.cart;
 
-  if (cart === null)  {
+  if (cart === null) {
     return undefined;
   }
 
@@ -514,8 +515,10 @@ export async function getMenu(handle: string): Promise<VercelMenu[]> {
       .split('/')
       .filter((item) => item.length)
       .pop();
+
   const createVercelCollectionPath = (title: string, menuType: 'footer' | 'header') =>
-    menuType === 'header' ? `/search/${title}` : `/${title}`;
+    menuType === 'header' ? `/${title}` : `/${title}`;
+
   const configureVercelMenu = (
     menuData: BigCommerceCategoryTreeItem[] | BigCommercePage[],
     isMenuData: boolean,
@@ -527,12 +530,8 @@ export async function getMenu(handle: string): Promise<VercelMenu[]> {
           let vercelMenuItem;
 
           if (menuType === 'header') {
-            const { name, path, hasChildren, children } = item as BigCommerceCategoryTreeItem;
+            const { name, path } = item as BigCommerceCategoryTreeItem;
             const vercelTitle = configureMenuPath(path ?? '');
-            // NOTE: keep only high level categories for NavBar
-            // if (hasChildren && children) {
-            //   return configureVercelMenu(children, hasChildren);
-            // }
 
             vercelMenuItem = {
               title: name,
@@ -550,7 +549,7 @@ export async function getMenu(handle: string): Promise<VercelMenu[]> {
               title: name,
               path: createVercelCollectionPath(vercelTitle!, menuType ?? 'footer')
             };
-            // NOTE: blog has different structure & separate mapper
+
             return vercelMenuItem.title === 'Blog' || !isVisibleInNavigation
               ? []
               : [vercelMenuItem];
@@ -558,7 +557,7 @@ export async function getMenu(handle: string): Promise<VercelMenu[]> {
 
           return [];
         })
-        .slice(0, 4);
+        .slice(0, 8); // UPDATED: Changed from 4 to 8
     }
 
     return [];
@@ -575,7 +574,8 @@ export async function getMenu(handle: string): Promise<VercelMenu[]> {
 
   if (handle === 'next-js-frontend-header-menu') {
     const res = await bigCommerceFetch<BigCommerceMenuOperation>({
-      query: getMenuQuery
+      query: getMenuQuery,
+      cache: 'no-store' // Added to bypass cache and show all 8 categories now
     });
 
     return configureVercelMenu(res.body.data.site.categoryTree, true, 'header');
@@ -624,16 +624,16 @@ export async function getProduct(handle: string): Promise<VercelProduct | undefi
 
 export async function getProductIdBySlug(path: string): Promise<
   | {
-      __typename:
-        | 'Product'
-        | 'Category'
-        | 'Brand'
-        | 'NormalPage'
-        | 'ContactPage'
-        | 'RawHtmlPage'
-        | 'BlogIndexPage';
-      entityId: number;
-    }
+    __typename:
+    | 'Product'
+    | 'Category'
+    | 'Brand'
+    | 'NormalPage'
+    | 'ContactPage'
+    | 'RawHtmlPage'
+    | 'BlogIndexPage';
+    entityId: number;
+  }
   | undefined
 > {
   const res = await bigCommerceFetch<BigCommerceEntityIdOperation>({
@@ -691,3 +691,41 @@ export async function getProducts({
 export async function revalidate(req: NextRequest): Promise<NextResponse> {
   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
 }
+
+
+// 1. Fetching Static Pages (Shipping, Contact, etc)
+export async function getPageContentRest(pageId: number) {
+  const endpoint = `https://api.bigcommerce.com/stores/${process.env.BIGCOMMERCE_STORE_HASH!}/v2/pages/${pageId}`;
+  const res = await fetch(endpoint, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'X-Auth-Token': process.env.BIGCOMMERCE_ACCESS_TOKEN!
+    },
+    cache: 'no-store'
+  });
+  return res.ok ? await res.json() : null;
+}
+
+
+export async function getBlogPostsRest() {
+  const endpoint = `https://api.bigcommerce.com/stores/${process.env.BIGCOMMERCE_STORE_HASH!}/v2/blog/posts?is_published=true`;
+
+  const res = await fetch(endpoint, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'X-Auth-Token': process.env.BIGCOMMERCE_ACCESS_TOKEN!
+    },
+    // This is the CRITICAL part for the "Refresh" issue:
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  });
+
+  if (!res.ok) return [];
+  const data = await res.json();
+
+  // Use the Mapper we built
+  return mapBigCommerceBlogPosts(data);
+}
+
