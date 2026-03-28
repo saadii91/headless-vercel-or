@@ -155,7 +155,7 @@ export default async function DynamicPage({
 
                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 mb-16">
                     {products.map((product: any) => (
-                        <Link key={product.handle} href={`/${product.handle}`}>
+                        <Link key={product.handle} href={`${product.handle}`}>
                             <GridTileImage
                                 alt={product.title}
                                 label={{

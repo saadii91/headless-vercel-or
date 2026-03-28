@@ -17,56 +17,54 @@ export default async function Navbar() {
   const LOGO_URL = 'https://cdn11.bigcommerce.com/s-9nn6ejxj73/images/stencil/250x100/tn-logo-companyname_1769032683__71795.original.png';
 
   return (
-    <nav className="sticky top-0 z-40 border-b border-neutral-200 bg-white/80 backdrop-blur-md">
-      {/* MAIN HEADER ROW */}
-      <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-3 lg:px-6">
-        <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative h-12 w-auto min-w-[120px] transition-transform group-hover:scale-105">
-              <img
-                src={LOGO_URL}
-                alt="TN Nursery Logo"
-                className="h-full w-auto object-contain object-left"
-              />
-            </div>
-          </Link>
+    <nav className="sticky top-0 z-40 border-b border-neutral-100 bg-white/80 backdrop-blur-md">
+      <div className="mx-auto max-w-screen-2xl px-4 py-3 lg:px-6">
 
-          {/* NAV LINKS - Now they have more room */}
-          <ul className="hidden gap-6 text-[13px] font-bold lg:flex xl:gap-8">
+        {/* MOBILE LAYOUT: 3-Column Grid | DESKTOP: Flex Row */}
+        <div className="grid grid-cols-3 items-center lg:flex lg:justify-between">
+
+          {/* LEFT: Mobile Menu (Hidden on Desktop) */}
+          <div className="flex lg:hidden">
+            <MobileMenu menu={fullMenu} />
+          </div>
+
+          {/* CENTER (Mobile) / LEFT (Desktop): Logo */}
+          <div className="flex justify-center lg:justify-start lg:flex-none">
+            <Link href="/" className="flex items-center group">
+              <div className="relative h-10 w-auto min-w-[100px] md:h-12 md:min-w-[120px] transition-transform group-hover:scale-105">
+                <img
+                  src={LOGO_URL}
+                  alt="TN Nursery Logo"
+                  className="h-full w-auto object-contain"
+                />
+              </div>
+            </Link>
+          </div>
+
+          {/* DESKTOP CENTER: Navigation Links */}
+          <ul className="hidden gap-6 text-[13px] font-bold lg:flex xl:gap-8 ml-8">
             {fullMenu.map((item) => (
               <li key={item.title}>
                 <Link
                   href={item.path}
-                  className="whitespace-nowrap text-neutral-600 transition-colors hover:text-[#285e2c]"
+                  className="whitespace-nowrap text-neutral-600 transition-colors hover:text-[#285e2c] relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-[#285e2c] after:transition-all hover:after:w-full"
                 >
                   {item.title}
                 </Link>
               </li>
             ))}
           </ul>
-        </div>
 
-        {/* RIGHT SIDE ACTIONS */}
-        <div className="flex items-center gap-4 ml-auto">
-          {/* SEARCH COMPONENT (Desktop) */}
-          <div className="hidden lg:block">
-            <Search />
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Cart />
-            <div className="lg:hidden">
-              <MobileMenu menu={fullMenu} />
+          {/* RIGHT: Search & Cart */}
+          <div className="flex items-center justify-end gap-2 md:gap-4 lg:ml-auto">
+            <div className="hidden lg:block">
+              <Search />
             </div>
+            <Cart />
           </div>
+
         </div>
       </div>
-
-      {/* Note: If your <Search /> component contains the input field, 
-          it will likely need a small CSS tweak to position itself 
-          absolutely 'top-full' so it drops below this bar without 
-          pushing the layout.
-      */}
     </nav>
   );
 }

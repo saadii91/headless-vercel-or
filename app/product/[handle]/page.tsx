@@ -1,142 +1,69 @@
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
-
-import { GridTileImage } from 'components/grid/tile';
-import Footer from 'components/layout/footer';
+import Price from 'components/price';
 import { Gallery } from 'components/product/gallery';
 import { ProductDescription } from 'components/product/product-description';
 import { getProduct, getProductRecommendations } from 'lib/bigcommerce';
-import { Image } from 'lib/bigcommerce/types';
-import { HIDDEN_PRODUCT_TAG } from 'lib/constants';
 import Link from 'next/link';
-
-export const runtime = 'edge';
-
-export async function generateMetadata({
-  params
-}: {
-  params: { handle: string };
-}): Promise<Metadata> {
-  const product = await getProduct(params.handle);
-
-  if (!product) return notFound();
-
-  const { url, width, height, altText: alt } = product.featuredImage || {};
-  const indexable = !product.tags.includes(HIDDEN_PRODUCT_TAG);
-
-  return {
-    title: product.seo.title || product.title,
-    description: product.seo.description || product.description,
-    robots: {
-      index: indexable,
-      follow: indexable,
-      googleBot: {
-        index: indexable,
-        follow: indexable
-      }
-    },
-    openGraph: url
-      ? {
-          images: [
-            {
-              url,
-              width,
-              height,
-              alt
-            }
-          ]
-        }
-      : null
-  };
-}
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 export default async function ProductPage({ params }: { params: { handle: string } }) {
   const product = await getProduct(params.handle);
-
   if (!product) return notFound();
 
-  const productJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.title,
-    description: product.description,
-    image: product.featuredImage.url,
-    offers: {
-      '@type': 'AggregateOffer',
-      availability: product.availableForSale
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
-      priceCurrency: product.priceRange.minVariantPrice.currencyCode,
-      highPrice: product.priceRange.maxVariantPrice.amount,
-      lowPrice: product.priceRange.minVariantPrice.amount
-    }
-  };
-
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productJsonLd)
-        }}
-      />
-      <div className="mx-auto max-w-screen-2xl px-4">
-        <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 dark:border-neutral-800 dark:bg-black md:p-12 lg:flex-row lg:gap-8">
-          <div className="h-full w-full basis-full lg:basis-4/6">
-            <Gallery
-              images={product.images.map((image: Image) => ({
-                src: image.url,
-                altText: image.altText
-              }))}
-            />
-          </div>
+    <div className="bg-white">
+      <main className="flex flex-col lg:flex-row items-stretch">
+        <section className="w-full lg:w-1/2">
+          <Gallery images={product.images.map(img => ({ src: img.url, altText: img.altText }))} />
+        </section>
 
-          <div className="basis-full lg:basis-2/6">
-            <ProductDescription product={product} />
-          </div>
+        <section className="w-full lg:w-1/2 flex items-start justify-center overflow-y-auto">
+          <ProductDescription product={product} />
+        </section>
+      </main>
+
+      <section className="w-full bg-[#fbfbfb] px-4 py-16 md:px-12 md:py-24 border-t border-neutral-100">
+        <div className="max-w-[1800px] mx-auto">
+          <p className="text-2xl md:text-3xl font-bold mb-8 md:mb-12 tracking-tight">Related Products</p>
+          <Suspense fallback={<div className="h-96 animate-pulse bg-neutral-200 rounded-3xl" />}>
+            <RelatedProducts id={product.id} />
+          </Suspense>
         </div>
-        <Suspense>
-          <RelatedProducts id={product.id} />
-        </Suspense>
-      </div>
-      <Suspense>
-        <Footer />
-      </Suspense>
-    </>
+      </section>
+    </div>
   );
 }
 
 async function RelatedProducts({ id }: { id: string }) {
   const relatedProducts = await getProductRecommendations(id);
-
   if (!relatedProducts.length) return null;
 
   return (
-    <div className="py-8">
-      <h2 className="mb-4 text-2xl font-bold">Related Products</h2>
-      <ul className="flex w-full gap-4 overflow-x-auto pt-1">
-        {relatedProducts.map((product) => (
-          <li
-            key={product.handle}
-            className="aspect-square w-full flex-none min-[475px]:w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5"
-          >
-            <Link className="relative h-full w-full" href={`${product.handle}`}>
-              <GridTileImage
-                alt={product.title}
-                label={{
-                  title: product.title,
-                  amount: product.priceRange.maxVariantPrice.amount,
-                  currencyCode: product.priceRange.maxVariantPrice.currencyCode
-                }}
-                src={product.featuredImage?.url}
-                fill
-                sizes="(min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, (min-width: 475px) 50vw, 100vw"
+    <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-10">
+      {relatedProducts.map((product) => (
+        <Link key={product.handle} href={`/product/${product.handle}`} className="group block">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl md:rounded-3xl mb-4 md:mb-6 bg-neutral-100 shadow-sm transition-all duration-500 group-hover:shadow-xl group-hover:-translate-y-2">
+            <img
+              src={product.featuredImage?.url}
+              alt={product.title}
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors" />
+          </div>
+
+          <div className="space-y-1">
+            <p className="text-base md:text-xl font-bold text-neutral-900 group-hover:text-[#285e2c] transition-colors leading-tight line-clamp-2">
+              {product.title}
+            </p>
+            <div className="text-[#285e2c] font-semibold text-sm md:text-lg">
+              <Price
+                amount={product.priceRange.maxVariantPrice.amount}
+                currencyCode={product.priceRange.maxVariantPrice.currencyCode}
               />
-            </Link>
-          </li>
-        ))}
-      </ul>
+            </div>
+          </div>
+        </Link>
+      ))}
     </div>
   );
 }

@@ -1,12 +1,11 @@
 'use client';
 
 import { Dialog, Transition } from '@headlessui/react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { VercelMenu as Menu } from 'lib/bigcommerce/types';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Fragment, useEffect, useState } from 'react';
-
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { VercelMenu as Menu } from 'lib/bigcommerce/types';
 import Search from './search';
 
 export default function MobileMenu({ menu }: { menu: Menu[] }) {
@@ -18,7 +17,7 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 768) {
+      if (window.innerWidth > 1024) {
         setIsOpen(false);
       }
     };
@@ -35,9 +34,9 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
       <button
         onClick={openMobileMenu}
         aria-label="Open mobile menu"
-        className="flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors dark:border-neutral-700 dark:text-white md:hidden"
+        className="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 text-black transition-colors active:scale-95"
       >
-        <Bars3Icon className="h-4" />
+        <Bars3Icon className="h-5" />
       </button>
       <Transition show={isOpen}>
         <Dialog onClose={closeMobileMenu} className="relative z-50">
@@ -50,7 +49,7 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
             leaveFrom="opacity-100 backdrop-blur-[.5px]"
             leaveTo="opacity-0 backdrop-blur-none"
           >
-            <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+            <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
           </Transition.Child>
           <Transition.Child
             as={Fragment}
@@ -61,27 +60,29 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-[-100%]"
           >
-            <Dialog.Panel className="fixed bottom-0 left-0 right-0 top-0 flex h-full w-full flex-col bg-white pb-6 dark:bg-black">
-              <div className="p-4">
+            <Dialog.Panel className="fixed bottom-0 left-0 right-0 top-0 flex h-full w-full flex-col bg-[#285e2c] pb-6 text-white">
+              <div className="p-6">
                 <button
-                  className="mb-4 flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors dark:border-neutral-700 dark:text-white"
+                  className="mb-8 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white transition-colors"
                   onClick={closeMobileMenu}
                   aria-label="Close mobile menu"
                 >
                   <XMarkIcon className="h-6" />
                 </button>
 
-                <div className="mb-4 w-full border-b border-neutral-200 pb-6 dark:border-neutral-800">
+                <div className="mb-8 w-full">
                   <Search />
                 </div>
+
                 {menu.length ? (
-                  <ul className="flex w-full flex-col">
+                  <ul className="flex w-full flex-col gap-6">
                     {menu.map((item: Menu) => (
-                      <li
-                        className="py-2 text-xl text-black transition-colors hover:text-neutral-500 dark:text-white"
-                        key={item.title}
-                      >
-                        <Link href={item.path} onClick={closeMobileMenu}>
+                      <li key={item.title}>
+                        <Link
+                          href={item.path}
+                          onClick={closeMobileMenu}
+                          className="text-2xl font-bold tracking-tight transition-colors hover:text-green-200"
+                        >
                           {item.title}
                         </Link>
                       </li>

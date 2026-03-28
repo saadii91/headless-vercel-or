@@ -728,3 +728,5 @@ export async function getBlogPostsRest() {
   return mapBigCommerceBlogPosts(data);
 }
 
+
+
