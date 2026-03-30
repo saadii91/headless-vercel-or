@@ -33,7 +33,7 @@ export default async function Navbar() {
                   className="h-full w-auto object-contain"
                 />
               </div>
-              <h1 className='invisible absolute'>Tree Nursery Co</h1>
+
             </Link>
           </div>
 

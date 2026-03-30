@@ -21,6 +21,7 @@ export default function HomeCarousel({ slides }: { slides: any[] }) {
 
     return (
         <section className="relative block w-full bg-gray-100 h-[50vh] md:h-[70vh]">
+            <h1 className='invisible absolute'>Tree Nursery Co</h1>
             {/* Custom CSS for White Arrows and Bullets with Mobile Hiding */}
             <style jsx global>{`
                 /* Hide navigation and pagination on mobile by default */
