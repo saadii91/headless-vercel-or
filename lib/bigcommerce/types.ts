@@ -235,13 +235,13 @@ export type BigCommerceEntityIdOperation = {
       route: {
         node: {
           __typename:
-            | 'Product'
-            | 'Category'
-            | 'Brand'
-            | 'NormalPage'
-            | 'ContactPage'
-            | 'RawHtmlPage'
-            | 'BlogIndexPage';
+          | 'Product'
+          | 'Category'
+          | 'Brand'
+          | 'NormalPage'
+          | 'ContactPage'
+          | 'RawHtmlPage'
+          | 'BlogIndexPage';
           entityId: number;
         };
       };

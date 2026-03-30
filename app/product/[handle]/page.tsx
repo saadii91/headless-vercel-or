@@ -27,7 +27,7 @@ export async function generateMetadata({
       ? { absolute: seoTitle }
       : seoTitle,
     description: product.seo.description || product.description,
-    keywords: product.seo.keywords || 'nursery, plants, trees',
+    keywords: (product.seo as any).keywords || 'nursery, plants, trees',
     alternates: {
       canonical: `/product/${params.handle}`
     },
