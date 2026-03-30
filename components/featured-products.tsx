@@ -28,9 +28,9 @@ export default async function FeaturedProducts({ productIds }: { productIds: num
                     <span className="text-[#3aae93] font-bold uppercase tracking-[0.3em] text-[10px] mb-2 block">
                         Handpicked for you
                     </span>
-                    <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-[#285e2c]">
+                    <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-[#285e2c]">
                         Featured Products
-                    </h2>
+                    </h3>
                 </div>
             </div>
 
@@ -57,9 +57,9 @@ export default async function FeaturedProducts({ productIds }: { productIds: num
                         </div>
 
                         <div className="mt-8 flex flex-col items-center text-center">
-                            <h3 className="text-lg font-black uppercase tracking-tight text-neutral-900 leading-tight group-hover:text-[#1b4332] transition-colors">
+                            <p className="text-lg font-black uppercase tracking-tight text-neutral-900 leading-tight group-hover:text-[#1b4332] transition-colors">
                                 {product.title}
-                            </h3>
+                            </p>
                             <p className="mt-2 text-xl font-medium text-[#1b4332]">
                                 ${parseFloat(product.priceRange.minVariantPrice.amount).toFixed(2)}
                             </p>

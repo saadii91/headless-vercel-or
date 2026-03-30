@@ -17,7 +17,7 @@ function SubmitButton({
 }) {
   const { pending } = useFormStatus();
 
-  const buttonClasses = "flex w-full items-center justify-center rounded-full bg-[#285e2c] p-4 tracking-wide text-white transition-all hover:bg-[#1e4621] hover:shadow-[0_10px_20px_rgba(40,94,44,0.3)] hover:-translate-y-0.5 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 font-bold shadow-lg";
+  const buttonClasses = "relative flex w-full items-center justify-center rounded-full bg-[#285e2c] p-4 tracking-wide text-white transition-all hover:bg-[#1e4621] hover:shadow-[0_10px_20px_rgba(40,94,44,0.3)] hover:-translate-y-0.5 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 font-bold shadow-lg overflow-hidden";
   const disabledClasses = 'cursor-not-allowed opacity-60 hover:opacity-60';
 
   if (!availableForSale) {
@@ -35,10 +35,10 @@ function SubmitButton({
         aria-disabled
         className={clsx(buttonClasses, disabledClasses)}
       >
-        <div className="absolute left-0 ml-4">
-          <PlusIcon className="h-5" />
+        <div className="absolute left-6 flex items-center justify-center">
+          <PlusIcon className="h-5 w-5" />
         </div>
-        Add To Cart
+        <span>Add To Cart</span>
       </button>
     );
   }
@@ -52,13 +52,17 @@ function SubmitButton({
       aria-disabled={pending}
       className={clsx(buttonClasses, {
         'hover:opacity-90': true,
-        disabledClasses: pending
+        [disabledClasses]: pending
       })}
     >
-      <div className="absolute left-0 ml-4">
-        {pending ? <LoadingDots className="mb-3 bg-white" /> : <PlusIcon className="h-5" />}
+      <div className="absolute left-6 flex items-center justify-center">
+        {pending ? (
+          <LoadingDots className="mb-3 bg-white" />
+        ) : (
+          <PlusIcon className="h-5 w-5" />
+        )}
       </div>
-      Add To Cart
+      <span>Add To Cart</span>
     </button>
   );
 }
@@ -72,13 +76,16 @@ export function AddToCart({
 }) {
   const [message, formAction] = useFormState(addItem, null);
   const searchParams = useSearchParams();
-  const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined;
-  const defaultProductId = variants.length === 1 ? variants[0]?.parentId : undefined;
+
   const variant = variants.find((variant: ProductVariant) =>
     variant.selectedOptions.every(
       (option) => option.value === searchParams.get(option.name.toLowerCase())
     )
   );
+
+  const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined;
+  const defaultProductId = variants.length === 1 ? variants[0]?.parentId : undefined;
+
   const selectedVariantId = variant?.id || defaultVariantId;
   const selectedProductId = variant?.parentId || defaultProductId;
   const actionWithVariant = formAction.bind(null, { selectedProductId, selectedVariantId });

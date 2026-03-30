@@ -19,16 +19,11 @@ export default async function Navbar() {
   return (
     <nav className="sticky top-0 z-40 border-b border-neutral-100 bg-white/80 backdrop-blur-md">
       <div className="mx-auto max-w-screen-2xl px-4 py-3 lg:px-6">
-
-        {/* MOBILE LAYOUT: 3-Column Grid | DESKTOP: Flex Row */}
         <div className="grid grid-cols-3 items-center lg:flex lg:justify-between">
-
-          {/* LEFT: Mobile Menu (Hidden on Desktop) */}
           <div className="flex lg:hidden">
             <MobileMenu menu={fullMenu} />
           </div>
 
-          {/* CENTER (Mobile) / LEFT (Desktop): Logo */}
           <div className="flex justify-center lg:justify-start lg:flex-none">
             <Link href="/" className="flex items-center group">
               <div className="relative h-10 w-auto min-w-[100px] md:h-12 md:min-w-[120px] transition-transform group-hover:scale-105">
@@ -38,10 +33,10 @@ export default async function Navbar() {
                   className="h-full w-auto object-contain"
                 />
               </div>
+              <h1 className='invisible absolute'>Tree Nursery Co</h1>
             </Link>
           </div>
 
-          {/* DESKTOP CENTER: Navigation Links */}
           <ul className="hidden gap-6 text-[13px] font-bold lg:flex xl:gap-8 ml-8">
             {fullMenu.map((item) => (
               <li key={item.title}>
@@ -55,14 +50,12 @@ export default async function Navbar() {
             ))}
           </ul>
 
-          {/* RIGHT: Search & Cart */}
           <div className="flex items-center justify-end gap-2 md:gap-4 lg:ml-auto">
             <div className="hidden lg:block">
               <Search />
             </div>
             <Cart />
           </div>
-
         </div>
       </div>
     </nav>

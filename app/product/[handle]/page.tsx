@@ -2,9 +2,53 @@ import Price from 'components/price';
 import { Gallery } from 'components/product/gallery';
 import { ProductDescription } from 'components/product/product-description';
 import { getProduct, getProductRecommendations } from 'lib/bigcommerce';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
+
+export async function generateMetadata({
+  params
+}: {
+  params: { handle: string };
+}): Promise<Metadata> {
+  const product = await getProduct(params.handle);
+
+  if (!product) return notFound();
+
+  const { url, width, height, altText: alt } = product.featuredImage || {};
+  const indexable = !product.tags.includes('noindex');
+
+  const seoTitle = product.seo.title || product.title;
+  const brandName = 'Tree Nursery Co';
+
+  return {
+    title: seoTitle.includes(brandName)
+      ? { absolute: seoTitle }
+      : seoTitle,
+    description: product.seo.description || product.description,
+    keywords: product.seo.keywords || 'nursery, plants, trees',
+    alternates: {
+      canonical: `/product/${params.handle}`
+    },
+    robots: {
+      index: indexable,
+      follow: indexable
+    },
+    openGraph: url
+      ? {
+        images: [
+          {
+            url,
+            width,
+            height,
+            alt
+          }
+        ]
+      }
+      : null
+  };
+}
 
 export default async function ProductPage({ params }: { params: { handle: string } }) {
   const product = await getProduct(params.handle);

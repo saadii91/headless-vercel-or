@@ -17,9 +17,9 @@ export default async function BlogSection() {
                         <span className="text-[#3aae93] font-bold uppercase tracking-[0.3em] text-[10px] mb-2 block">
                             Fresh from the garden
                         </span>
-                        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-[#285e2c] leading-none">
+                        <h3 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-[#285e2c] leading-none">
                             Our Blog
-                        </h2>
+                        </h3>
                     </div>
                     <Link
                         href="/blog"

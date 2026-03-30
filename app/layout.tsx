@@ -1,16 +1,15 @@
 import Footer from 'components/layout/footer';
 import Navbar from 'components/layout/navbar';
-import { ensureStartsWith } from 'lib/utils';
 import { Inter } from 'next/font/google';
 import { ReactNode, Suspense } from 'react';
 import './globals.css';
 
 const { TWITTER_CREATOR, TWITTER_SITE } = process.env;
-// Updated to your real domain
 const baseUrl = 'https://treenurseryco.com';
 
-const twitterCreator = TWITTER_CREATOR ? ensureStartsWith(TWITTER_CREATOR, '@') : undefined;
-const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : undefined;
+
+// const twitterCreator = TWITTER_CREATOR ? ensureStartsWith(TWITTER_CREATOR, '@') : undefined;
+// const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : undefined;
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -19,6 +18,10 @@ export const metadata = {
     template: `%s | Tree Nursery Co`
   },
   description: 'Shop Tree Nursery Co for quality trees, shrubs, and plants shipped fresh to your door. Easy online ordering and trusted nursery expertise.',
+  keywords: ['nursery', 'buy trees online', 'plants', 'shrubs', 'gardening'],
+  alternates: {
+    canonical: '/'
+  },
   robots: {
     follow: true,
     index: true
@@ -26,6 +29,8 @@ export const metadata = {
   icons: {
     icon: '/favicon.ico',
   },
+
+  /*
   ...(twitterCreator &&
     twitterSite && {
     twitter: {
@@ -34,6 +39,7 @@ export const metadata = {
       site: twitterSite
     }
   })
+  */
 };
 
 const inter = Inter({
