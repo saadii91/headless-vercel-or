@@ -39,6 +39,7 @@ const bigCommerceToVercelOptions = (options: BigCommerceProductOption[]): Vercel
     };
   });
 };
+
 const bigCommerceToVercelVariants = (
   variants: BigCommerceProductVariant[],
   productId: number
@@ -63,8 +64,7 @@ const bigCommerceToVercelVariants = (
           variant.prices?.price.value.toString() ||
           variant.prices?.priceRange.max.value.toString() ||
           '0',
-        currencyCode:
-          variant.prices?.price.currencyCode || variant.prices?.priceRange.max.currencyCode || ''
+        currencyCode: 'USD'
       }
     };
   });
@@ -92,7 +92,7 @@ const bigCommerceToVercelProduct = (product: BigCommerceProduct): VercelProduct 
   return {
     id: product.id.toString(),
     handle: product.path,
-    availableForSale: product.availabilityV2.status === 'Available' ? true : false,
+    availableForSale: product.availabilityV2.status === 'Available',
     title: product.name,
     description: product.plainTextDescription || '',
     descriptionHtml: product.description ?? '',
@@ -103,16 +103,14 @@ const bigCommerceToVercelProduct = (product: BigCommerceProduct): VercelProduct 
           product.prices.priceRange.max.value.toString() ||
           product.prices.price.value.toString() ||
           '0',
-        currencyCode:
-          product.prices.priceRange.max.currencyCode || product.prices.price.currencyCode || ''
+        currencyCode: 'USD'
       },
       minVariantPrice: {
         amount:
           product.prices.priceRange.min.value.toString() ||
           product.prices.price.value.toString() ||
           '0',
-        currencyCode:
-          product.prices.priceRange.min.currencyCode || product.prices.price.currencyCode || ''
+        currencyCode: 'USD'
       }
     },
     variants,
@@ -160,8 +158,8 @@ const bigCommerceToVercelCartItems = (
         descriptionHtml: '',
         options: [],
         priceRange: {
-          maxVariantPrice: { amount: '', currencyCode: '' },
-          minVariantPrice: { amount: '', currencyCode: '' }
+          maxVariantPrice: { amount: '', currencyCode: 'USD' },
+          minVariantPrice: { amount: '', currencyCode: 'USD' }
         },
         variants: [],
         featuredImage: {
@@ -201,13 +199,13 @@ const bigCommerceToVercelCartItems = (
       }
 
       return {
-        id: item.entityId.toString(), // NOTE: used as lineId || lineItemId
+        id: item.entityId.toString(),
         quantity: item.quantity,
         cost: {
           totalAmount: {
             amount:
               item.extendedListPrice.value.toString() || item.listPrice.value.toString() || '0',
-            currencyCode: item.extendedListPrice.currencyCode || item.listPrice.currencyCode || ''
+            currencyCode: 'USD'
           }
         },
         merchandise: {
@@ -243,15 +241,15 @@ const bigCommerceToVercelCart = (
     cost: {
       subtotalAmount: {
         amount: checkout.subtotal.value.toString(),
-        currencyCode: checkout.subtotal.currencyCode
+        currencyCode: 'USD'
       },
       totalAmount: {
         amount: checkout.grandTotal.value.toString(),
-        currencyCode: checkout.grandTotal.currencyCode
+        currencyCode: 'USD'
       },
       totalTaxAmount: {
         amount: checkout.taxTotal.value.toString(),
-        currencyCode: checkout.taxTotal.currencyCode
+        currencyCode: 'USD'
       }
     },
     lines: bigCommerceToVercelCartItems(cart.lineItems, products),
@@ -332,10 +330,6 @@ export const bigCommerceToVercelPageContent = (page: BigCommercePage): VercelPag
   };
 };
 
-
-
-
-
 export const mapBigCommerceBlogPosts = (posts: any[]) => {
   const storeHash = process.env.BIGCOMMERCE_STORE_HASH;
   return posts.map((post: any) => {
@@ -347,15 +341,12 @@ export const mapBigCommerceBlogPosts = (posts: any[]) => {
       title: post.title,
       slug: slug,
       publishedDate: post.published_date.date,
-      // Keep the summary cleanup but don't use it as the ONLY description
       summary: post.summary.replace(/<[^>]*>?/gm, '').substring(0, 150) + '...',
       body: post.body,
       imageSources: [
         `https://cdn11.bigcommerce.com/s-${storeHash}/images/stencil/640w/${path}`,
         `https://cdn11.bigcommerce.com/s-${storeHash}/${path}`
       ].filter(src => !src.endsWith('/')),
-
-      // --- ADD THESE TWO LINES ---
       meta_title: post.meta_title || post.title,
       meta_description: post.meta_description || ""
     };

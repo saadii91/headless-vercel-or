@@ -1,7 +1,7 @@
 const Price = ({
   amount,
   className,
-  currencyCode = 'USD',
+  currencyCode = 'USD', // This is your default if none is provided
 }: {
   amount: string;
   className?: string;
@@ -9,12 +9,14 @@ const Price = ({
   currencyCodeClassName?: string;
 } & React.ComponentProps<'p'>) => {
 
-  // Create a reusable formatter to keep code clean
-  const formatter = new Intl.NumberFormat(undefined, {
+  // Force 'en-US' to ensure the $ symbol and US decimal formatting
+  const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currencyCode,
     currencyDisplay: 'narrowSymbol'
   });
+
+
 
   if (amount.includes('-')) {
     const [min, max] = amount.split('-').map(p => p.trim());
