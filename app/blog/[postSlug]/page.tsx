@@ -14,7 +14,6 @@ export async function generateMetadata({
 
     if (!post) return { title: 'Post Not Found' };
 
-    // Use meta_description if exists, otherwise use the summary we created in the mapper
     const description = post.meta_description || post.summary;
 
     return {
@@ -23,7 +22,6 @@ export async function generateMetadata({
         openGraph: {
             title: post.meta_title || post.title,
             description: description,
-            // post.imageSources is an array of strings (URLs)
             images: post.imageSources?.[0] ? [{ url: post.imageSources[0] }] : []
         }
     };
@@ -34,18 +32,34 @@ export default async function BlogPostPage({ params }: { params: Promise<{ postS
     const allPosts = await getBlogPostsRest();
     const post = allPosts.find((p: any) => p.slug === postSlug);
 
-    console.log('--- DEBUG: SINGLE BLOG POST DATA ---');
-    if (post) {
-        console.log(JSON.stringify(post, null, 2));
-    } else {
-        console.log('No post found for slug:', postSlug);
-    }
-
     if (!post) return notFound();
+
+    const blogPostSchema = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post.title,
+        "image": post.imageSources?.[0],
+        "datePublished": post.publishedDate,
+        "author": {
+            "@type": "Organization",
+            "name": "Tree Nursery Co"
+        },
+        "publisher": {
+            "@id": "https://www.treenurseryco.com/#organization"
+        },
+        "description": post.summary ? post.summary.replace(/<[^>]*>?/gm, '') : "",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": `https://www.treenurseryco.com/blog/${post.slug}`
+        }
+    };
 
     return (
         <div className="bg-[#fcfdfc] w-full">
-            {/* BANNER (ORIGINAL) */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostSchema) }}
+            />
             <section className="w-full bg-[#1b4332] min-h-[400px] flex flex-col md:flex-row overflow-hidden">
                 <div className="w-full md:w-1/2 relative aspect-video md:aspect-auto bg-neutral-200">
                     <BlogImage sources={post.imageSources} alt={post.title} />
@@ -65,24 +79,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ postS
                 </div>
             </section>
 
-            {/* FULL WIDTH & MOBILE FRIENDLY CONTENT */}
             <main className="w-full px-5 md:px-16 lg:px-24 py-12 md:py-20">
                 <article className="w-full">
                     <div
                         className="prose prose-base md:prose-xl max-w-none 
-                            /* Heading Mobile Fixes */
                             prose-headings:text-[#1b4332] 
                             prose-headings:font-black 
                             prose-headings:uppercase 
                             prose-headings:tracking-tighter
                             prose-h2:text-2xl md:prose-h2:text-4xl
                             prose-h3:text-xl md:prose-h3:text-3xl
-                            
-                            /* Body Text Fixes */
                             prose-p:text-neutral-600 
                             prose-p:leading-snug md:prose-p:leading-relaxed
-                            
-                            /* Image & Link Fixes */
                             prose-img:rounded-2xl md:prose-img:rounded-3xl 
                             prose-img:w-full
                             prose-a:text-[#3aae93] 

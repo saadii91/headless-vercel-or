@@ -5,7 +5,7 @@ export function CollectionGrid({ collections }: { collections: any[] }) {
     if (!collections || collections.length === 0) return null;
 
     return (
-        <section className="mx-auto max-w-screen-2xl px-4 py-10 md:py-16">
+        <section className="w-full px-4 py-10 md:py-16 lg:px-8">
             <h2 className="mb-8 text-center text-3xl font-extrabold tracking-tight md:mb-12 md:text-5xl text-[#285e2c]">
                 Explore Our Nursery
             </h2>
@@ -22,7 +22,7 @@ export function CollectionGrid({ collections }: { collections: any[] }) {
                                 src={item.image}
                                 alt={item.title}
                                 fill
-                                sizes="(max-width: 768px) 50vw, 25vw"
+                                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
                                 className="object-cover transition-transform duration-700 group-hover:scale-105"
                                 quality={90}
                             />

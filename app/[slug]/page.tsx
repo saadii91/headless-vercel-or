@@ -78,13 +78,36 @@ export default async function DynamicPage({
 
     if (slug === 'blog' || slug === 'gardening-blog') {
         const posts = await getBlogPostsRest() || [];
+
+        const blogSchema = {
+            "@context": "https://schema.org",
+            "@type": "Blog",
+            "name": "Gardening Blog",
+            "description": "Practical gardening tips, plant guides, and expert advice on trees, perennials, shrubs, and native plants.",
+            "url": `https://www.treenurseryco.com/${slug}`,
+            "publisher": {
+                "@id": "https://www.treenurseryco.com/#organization"
+            },
+            "blogPost": posts.map((post: any) => ({
+                "@type": "BlogPosting",
+                "headline": post.title,
+                "url": `https://www.treenurseryco.com/blog/${post.slug}`,
+                "datePublished": post.publishedDate,
+                "description": post.summary?.replace(/<[^>]*>?/gm, '')
+            }))
+        };
+
         return (
-            <div className="mx-auto max-w-[1600px] px-6 py-20 bg-[#fcfdfc]">
+            <div className="w-full px-6 py-20 bg-[#fcfdfc] lg:px-12">
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+                />
                 <header className="mb-16">
                     <h1 className="text-6xl font-black text-[#285e2c] mb-2 tracking-tighter uppercase">Gardening Blog</h1>
                     <div className="h-1.5 w-24 bg-[#3aae93]"></div>
                 </header>
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
                     {posts.map((post: any) => (
                         <article key={post.id} className="flex flex-col group bg-white border border-neutral-200 rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300">
                             <Link href={`/blog/${post.slug}`} className="relative aspect-[4/3] overflow-hidden">
@@ -109,8 +132,22 @@ export default async function DynamicPage({
     if (pageId) {
         const pageData = await getPageContentRest(pageId);
         if (pageData) {
+            const webPageSchema = {
+                "@context": "https://schema.org",
+                "@type": "WebPage",
+                "name": pageData.name,
+                "description": pageData.meta_description || "",
+                "publisher": {
+                    "@id": "https://www.treenurseryco.com/#organization"
+                }
+            };
+
             return (
-                <div className="mx-auto max-w screen-md px-4 py-24">
+                <div className="mx-auto max-w-screen-xl px-4 py-24">
+                    <script
+                        type="application/ld+json"
+                        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+                    />
                     <h1 className="text-6xl font-black text-[#285e2c] mb-12 tracking-tighter">{pageData.name}</h1>
                     <div className="prose prose-xl max-w-none" dangerouslySetInnerHTML={{ __html: pageData.body || '' }} />
                 </div>
@@ -137,14 +174,34 @@ export default async function DynamicPage({
         const hasNextPage = productsObj?.pageInfo?.hasNextPage;
         const endCursor = productsObj?.pageInfo?.endCursor;
 
+        const categorySchema = {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": category.title,
+            "url": `https://www.treenurseryco.com/${slug}`,
+            "description": category.description ? category.description.replace(/<[^>]*>?/gm, '') : `Shop our ${category.title} collection.`,
+            "mainEntity": {
+                "@type": "ItemList",
+                "itemListElement": products.map((product, index) => ({
+                    "@type": "ListItem",
+                    "position": index + 1,
+                    "url": `https://www.treenurseryco.com/product/${product.handle}`
+                }))
+            }
+        };
+
         return (
-            <div className="mx-auto max-w-[1600px] px-6 py-10">
+            <div className="w-full px-6 py-10 lg:px-12">
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(categorySchema) }}
+                />
                 <header className="mb-12">
                     <h1 className="text-6xl font-black text-[#285e2c] mb-4 tracking-tighter uppercase">{category.title}</h1>
                     <div className="h-1.5 w-24 bg-[#3aae93]"></div>
                 </header>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-16">
+                <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8 mb-16">
                     {products.map((product: any) => (
                         <Link key={product.handle} href={`${product.handle}`}>
                             <GridTileImage

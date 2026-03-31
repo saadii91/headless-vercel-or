@@ -54,8 +54,32 @@ export default async function ProductPage({ params }: { params: { handle: string
   const product = await getProduct(params.handle);
   if (!product) return notFound();
 
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.title,
+    "image": product.featuredImage?.url,
+    "description": product.descriptionHtml ? product.descriptionHtml.replace(/<[^>]*>?/gm, '') : product.description,
+    "sku": product.id,
+    "offers": {
+      "@type": "Offer",
+      "price": product.priceRange.minVariantPrice.amount,
+      "priceCurrency": product.priceRange.minVariantPrice.currencyCode,
+      "availability": product.availableForSale ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      "url": `https://www.treenurseryco.com/${product.handle}`
+    },
+    "brand": {
+      "@type": "Brand",
+      "name": "Tree Nursery Co"
+    }
+  };
+
   return (
     <div className="bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
       <main className="flex flex-col lg:flex-row items-stretch">
         <section className="w-full lg:w-1/2">
           <Gallery images={product.images.map(img => ({ src: img.url, altText: img.altText }))} />
