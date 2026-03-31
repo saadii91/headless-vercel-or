@@ -22,7 +22,7 @@ export function ProductDescription({ product }: { product: Product }) {
   const showRange = !selectedVariant && minPrice !== maxPrice;
 
   return (
-    <div className="w-full px-4 py-8 md:px-12 lg:px-20">
+    <div className="w-full px-4 py-8 md:px-12 lg:px-20 bg-white">
       <h1 className="text-3xl md:text-6xl font-bold mb-4 md:mb-6 tracking-tighter text-neutral-900 leading-tight">
         {product.title}
       </h1>
@@ -37,7 +37,7 @@ export function ProductDescription({ product }: { product: Product }) {
           ) : showRange ? (
             <div className="flex items-center gap-2">
               <Price amount={minPrice} currencyCode={currency} />
-              <span className="text-neutral-300 text-xl md:text-2xl">—</span>
+              <span className="text-neutral-400 text-xl md:text-2xl">—</span>
               <Price amount={maxPrice} currencyCode={currency} />
             </div>
           ) : (
@@ -58,10 +58,15 @@ export function ProductDescription({ product }: { product: Product }) {
       {product.descriptionHtml && (
         <section className="mt-8 md:mt-12">
           <div className="flex items-center gap-4 mb-4 md:mb-6">
-            <p className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-neutral-900">Product Details</p>
+            <p className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-neutral-900">
+              Product Details
+            </p>
             <div className="h-px flex-1 bg-neutral-100" />
           </div>
-          <Prose className="text-base md:text-lg text-neutral-600 leading-relaxed font-light" html={product.descriptionHtml} />
+          <Prose
+            className="text-base md:text-lg text-neutral-700 leading-relaxed font-light"
+            html={product.descriptionHtml}
+          />
         </section>
       )}
     </div>

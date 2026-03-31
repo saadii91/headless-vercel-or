@@ -23,27 +23,22 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const { slug } = params;
     const path = slug.startsWith('/') ? slug : `/${slug}`;
 
-    // 1. BLOGS: Fetching SEO from BigCommerce Blog API
     if (slug === 'blog' || slug === 'gardening-blog') {
-        // You can fetch global blog SEO here or keep it static
         return {
             title: 'Gardening Blog',
             description: 'Practical gardening tips, plant guides, and expert advice on trees, perennials, shrubs, and native plants. Learn how to grow healthier landscapes year-round.'
         };
     }
 
-    // 2. STATIC PAGES in app/[slug]/page.tsx
     const staticPageId = STATIC_PAGE_MAP[slug];
     if (staticPageId) {
         const pageData = await getPageContentRest(staticPageId);
         return {
-            // Based on your log, it's 'meta_title'
             title: pageData?.meta_title || pageData?.name,
             description: pageData?.meta_description || ""
         };
     }
 
-    // 3. CATEGORIES: Fetching SEO from GraphQL
     try {
         const routeRes = await bigCommerceFetch<any>({ query: getEntityIdByRouteQuery, variables: { path } });
         const node = routeRes.body.data?.site?.route?.node;
@@ -76,13 +71,11 @@ export default async function DynamicPage({
     params: { slug: string };
     searchParams: { cursor?: string; page?: string };
 }) {
-    // ... (Keep the rest of your existing DynamicPage code exactly as it is)
     const { slug } = params;
     const path = slug.startsWith('/') ? slug : `/${slug}`;
     const cursor = searchParams.cursor || null;
     const currentPage = Number(searchParams.page) || 1;
 
-    // --- 1. BLOG HANDLER ---
     if (slug === 'blog' || slug === 'gardening-blog') {
         const posts = await getBlogPostsRest() || [];
         return (
@@ -91,7 +84,7 @@ export default async function DynamicPage({
                     <h1 className="text-6xl font-black text-[#285e2c] mb-2 tracking-tighter uppercase">Gardening Blog</h1>
                     <div className="h-1.5 w-24 bg-[#3aae93]"></div>
                 </header>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
                     {posts.map((post: any) => (
                         <article key={post.id} className="flex flex-col group bg-white border border-neutral-200 rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300">
                             <Link href={`/blog/${post.slug}`} className="relative aspect-[4/3] overflow-hidden">
@@ -112,13 +105,12 @@ export default async function DynamicPage({
         );
     }
 
-    // --- 2. STATIC PAGES ---
     const pageId = STATIC_PAGE_MAP[slug];
     if (pageId) {
         const pageData = await getPageContentRest(pageId);
         if (pageData) {
             return (
-                <div className="mx-auto max-w-screen-md px-4 py-24">
+                <div className="mx-auto max-w screen-md px-4 py-24">
                     <h1 className="text-6xl font-black text-[#285e2c] mb-12 tracking-tighter">{pageData.name}</h1>
                     <div className="prose prose-xl max-w-none" dangerouslySetInnerHTML={{ __html: pageData.body || '' }} />
                 </div>
@@ -126,7 +118,6 @@ export default async function DynamicPage({
         }
     }
 
-    // --- 3. CATEGORY HANDLER ---
     const routeRes = await bigCommerceFetch<any>({ query: getEntityIdByRouteQuery, variables: { path } });
     const node = routeRes.body.data?.site?.route?.node;
 
@@ -153,7 +144,7 @@ export default async function DynamicPage({
                     <div className="h-1.5 w-24 bg-[#3aae93]"></div>
                 </header>
 
-                <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 mb-16">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-16">
                     {products.map((product: any) => (
                         <Link key={product.handle} href={`${product.handle}`}>
                             <GridTileImage

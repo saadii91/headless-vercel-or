@@ -22,7 +22,7 @@ export default function HomeCarousel({ slides }: { slides: any[] }) {
     return (
         <section className="relative block w-full bg-gray-100 h-[50vh] md:h-[70vh]">
             <h1 className='invisible absolute'>Tree Nursery Co</h1>
-            {/* Custom CSS for White Arrows and Bullets with Mobile Hiding */}
+
             <style jsx global>{`
                 /* Hide navigation and pagination on mobile by default */
                 .swiper-button-next, 
@@ -72,7 +72,7 @@ export default function HomeCarousel({ slides }: { slides: any[] }) {
                                 sizes="100vw"
                                 quality={90}
                             />
-                            {/* Mobile-friendly padding and text sizing */}
+
                             <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 text-center text-white p-4 md:p-12">
                                 <h2 className="text-3xl font-bold leading-tight md:text-6xl max-w-[90%] md:max-w-4xl">
                                     {slide.title}
