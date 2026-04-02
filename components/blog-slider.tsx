@@ -70,7 +70,7 @@ export default function BlogSlider({ posts }: { posts: any[] }) {
                                             loading="lazy"
                                             className="object-cover transition-transform duration-700"
                                             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 2000px) 33vw, 25vw"
-                                            quality={100}
+                                            quality={80}
                                         />
                                     )}
                                 </div>

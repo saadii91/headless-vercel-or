@@ -44,7 +44,7 @@ export default async function FeaturedProducts({ productIds }: { productIds: num
                                     loading="lazy"
                                     className="object-cover"
                                     sizes="(max-width: 768px) 50vw, 25vw"
-                                    quality={100}
+                                    quality={80}
                                 />
                             )}
                         </div>
