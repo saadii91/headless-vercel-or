@@ -65,10 +65,13 @@ export default function HomeCarousel({ slides }: { slides: any[] }) {
                                 src={slide.image.url}
                                 alt={slide.title}
                                 fill
+                                // Priority on the first slide is crucial for LCP
                                 priority={index === 0}
                                 className="object-cover"
-                                sizes="100vw"
-                                quality={100}
+                                // sizes logic: 100vw for mobile/tablet, caps at 1920px for large desktops
+                                sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1920px"
+                                // 85 is the sweet spot to pass Google PageSpeed while staying sharp
+                                quality={85}
                             />
 
                             <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/30 text-center text-white p-4 md:p-12">

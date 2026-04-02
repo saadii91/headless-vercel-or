@@ -11,7 +11,7 @@ export function CollectionGrid({ collections }: { collections: any[] }) {
             </h2>
 
             <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4 lg:gap-10">
-                {collections.map((item) => (
+                {collections.map((item, index) => (
                     <Link
                         key={item.handle}
                         href={`/${item.handle}`}
@@ -22,9 +22,13 @@ export function CollectionGrid({ collections }: { collections: any[] }) {
                                 src={item.image}
                                 alt={item.title}
                                 fill
-                                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
+                                // Priority for the first 2 on mobile, first 4 on desktop
+                                // since they are now visible on page load.
+                                priority={index < 4}
+                                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                 className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                quality={90}
+                                // Quality 80 is perfect for grid thumbnails to keep LCP low
+                                quality={80}
                             />
                         </div>
 
