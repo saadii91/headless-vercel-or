@@ -339,6 +339,7 @@ export const mapBigCommerceBlogPosts = (posts: any[]) => {
     return {
       id: post.id,
       title: post.title,
+      author: post.author,
       slug: slug,
       publishedDate: post.published_date.date,
       summary: post.summary.replace(/<[^>]*>?/gm, '').substring(0, 150) + '...',

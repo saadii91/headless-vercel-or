@@ -1,5 +1,6 @@
 import Cart from 'components/cart';
 import { getMenu } from 'lib/bigcommerce';
+import Image from 'next/image';
 import Link from 'next/link';
 import MobileMenu from './mobile-menu';
 import Search from './search';
@@ -18,7 +19,7 @@ export default async function Navbar() {
 
   return (
     <nav className="sticky top-0 z-40 border-b border-neutral-100 bg-white/80 backdrop-blur-md">
-      <div className="mx-auto max-w-screen-2xl px-4 py-3 lg:px-6">
+      <div className="mx-auto max-w-[2000px] px-4 py-3 lg:px-12">
         <div className="grid grid-cols-3 items-center lg:flex lg:justify-between">
           <div className="flex lg:hidden">
             <MobileMenu menu={fullMenu} />
@@ -26,18 +27,20 @@ export default async function Navbar() {
 
           <div className="flex justify-center lg:justify-start lg:flex-none">
             <Link href="/" className="flex items-center group">
-              <div className="relative h-10 w-auto min-w-[100px] md:h-12 md:min-w-[120px] transition-transform group-hover:scale-105">
-                <img
+              <div className="relative h-10 w-[95px] md:h-12 md:w-[114px] transition-transform group-hover:scale-105">
+                <Image
                   src={LOGO_URL}
                   alt="TN Nursery Logo"
-                  className="h-full w-auto object-contain"
+                  fill
+                  priority
+                  className="object-contain"
+                  sizes="(max-width: 768px) 95px, 114px"
                 />
               </div>
-
             </Link>
           </div>
 
-          <ul className="hidden gap-6 text-[13px] font-bold lg:flex xl:gap-8 ml-8">
+          <ul className="hidden gap-6 text-[13px] font-bold lg:flex xl:gap-8 ml-12">
             {fullMenu.map((item) => (
               <li key={item.title}>
                 <Link
