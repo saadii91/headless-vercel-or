@@ -6,30 +6,39 @@ export const BIGCOMMERCE_GRAPHQL_API_ENDPOINT = `${BIGCOMMERCE_CANONICAL_STORE_D
 
 export const HOME_SLIDES = [
   {
-    title: "Premium Indoor Plants",
-    description: "Transform your living space with our curated collection of rare greenery.",
-    buttonText: "Shop Collection",
-    buttonLink: "/search/indoor-plants",
+    title: "Shade & Flower Trees",
+    description: "Trees anchor the landscape with strength and beauty, providing cooling shade, seasonal interest, and lasting value as they grow into living legacies for generations to enjoy",
+    buttonText: "Shop",
+    buttonLink: "/trees",
     image: {
-      url: "https://cdn11.bigcommerce.com/s-kss309bppi/images/stencil/original/image-manager/treenurseryco-perennials.jpg"
+      url: "https://cdn11.bigcommerce.com/s-9nn6ejxj73/images/stencil/original/image-manager/trees-image.jpg?t=1775116668"
     }
   },
   {
-    title: "Summer Garden Sale",
-    description: "Save 30% on all outdoor perennials and garden tools this week.",
-    buttonText: "View Offers",
-    buttonLink: "/search/sale",
+    title: "Shrubs & Bushes",
+    description: "Shrubs form the backbone of the landscape, offering year-round structure, seasonal color, and natural privacy while growing fuller and more beautiful with each passing year",
+    buttonText: "Shop",
+    buttonLink: "/shrubs",
     image: {
-      url: "https://cdn11.bigcommerce.com/s-kss309bppi/images/stencil/original/image-manager/treenurseryco-shrubs.jpg"
+      url: "https://cdn11.bigcommerce.com/s-9nn6ejxj73/images/stencil/original/image-manager/shrubs-image.jpg?t=1775116666"
     }
   },
   {
-    title: "Summer Garden Sale",
-    description: "Save 30% on all outdoor perennials and garden tools this week.",
-    buttonText: "View Offers",
-    buttonLink: "/search/sale",
+    title: "Native Fern Plants",
+    description: "Ferns add timeless elegance to the garden, unfolding lush green fronds each season that thrive in shade, soften the landscape, and create a calm, woodland feel with very little maintenance",
+    buttonText: "Shop",
+    buttonLink: "/ferns",
     image: {
-      url: "https://cdn11.bigcommerce.com/s-kss309bppi/images/stencil/original/image-manager/treenurseryco-trees.jpg"
+      url: "https://cdn11.bigcommerce.com/s-9nn6ejxj73/images/stencil/original/image-manager/ferns-image.jpg?t=1775116663"
+    }
+  },
+  {
+    title: "Perennial Plants",
+    description: "Perennials bring lasting beauty to the landscape year after year, returning stronger each season with dependable blooms, rich texture, and natural resilience that supports pollinators while keeping your garden vibrant with less effort.",
+    buttonText: "Shop",
+    buttonLink: "/perennials",
+    image: {
+      url: "https://cdn11.bigcommerce.com/s-9nn6ejxj73/images/stencil/original/image-manager/perennials-image.jpg?t=1775116661"
     }
   }
 ];
