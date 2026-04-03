@@ -17,13 +17,18 @@ function SubmitButton({
 }) {
   const { pending } = useFormStatus();
 
-  const buttonClasses = "relative flex w-full items-center justify-center rounded-full bg-[#285e2c] p-4 tracking-wide text-white transition-all hover:bg-[#1e4621] hover:shadow-[0_10px_20px_rgba(40,94,44,0.3)] hover:-translate-y-0.5 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 font-bold shadow-lg overflow-hidden";
+  const buttonClasses = "relative flex w-full items-center justify-center rounded-full p-4 tracking-wide text-white transition-all hover:shadow-[0_10px_20px_rgba(40,94,44,0.3)] hover:-translate-y-0.5 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 font-bold shadow-lg overflow-hidden capitalize";
   const disabledClasses = 'cursor-not-allowed opacity-60 hover:opacity-60';
+  const gradientStyle = { backgroundImage: 'linear-gradient(to right, #4e6c25 0%, #254518 51%, #254518 100%)' };
 
   if (!availableForSale) {
     return (
-      <button aria-disabled className={clsx(buttonClasses, disabledClasses)}>
-        Out Of Stock
+      <button
+        aria-disabled
+        className={clsx(buttonClasses, disabledClasses)}
+        style={gradientStyle}
+      >
+        Out of stock
       </button>
     );
   }
@@ -34,11 +39,12 @@ function SubmitButton({
         aria-label="Please select an option"
         aria-disabled
         className={clsx(buttonClasses, disabledClasses)}
+        style={gradientStyle}
       >
         <div className="absolute left-6 flex items-center justify-center">
           <PlusIcon className="h-5 w-5" />
         </div>
-        <span>Add To Cart</span>
+        <span>Add to cart</span>
       </button>
     );
   }
@@ -54,6 +60,7 @@ function SubmitButton({
         'hover:opacity-90': true,
         [disabledClasses]: pending
       })}
+      style={gradientStyle}
     >
       <div className="absolute left-6 flex items-center justify-center">
         {pending ? (
@@ -62,7 +69,7 @@ function SubmitButton({
           <PlusIcon className="h-5 w-5" />
         )}
       </div>
-      <span>Add To Cart</span>
+      <span>Add to cart</span>
     </button>
   );
 }

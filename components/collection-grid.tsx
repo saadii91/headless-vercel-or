@@ -19,7 +19,7 @@ export function CollectionGrid({ collections }: { collections: any[] }) {
                                 alt={item.title}
                                 fill
                                 priority={index < 4}
-                                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                                 className="object-cover"
                                 quality={100}
                             />
