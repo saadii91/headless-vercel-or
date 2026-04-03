@@ -9,10 +9,12 @@ export async function addItem(
   prevState: any,
   {
     selectedProductId,
-    selectedVariantId
+    selectedVariantId,
+    quantity
   }: {
     selectedProductId: string | undefined;
     selectedVariantId: string | undefined;
+    quantity: number;
   }
 ) {
   const cartId = cookies().get('cartId')?.value;
@@ -23,7 +25,7 @@ export async function addItem(
 
   try {
     const { id } = await addToCart(cartId ?? '', [
-      { merchandiseId: selectedVariantId, quantity: 1, productId: selectedProductId }
+      { merchandiseId: selectedVariantId, quantity, productId: selectedProductId }
     ]);
     revalidateTag(TAGS.cart);
     cookies().set('cartId', id);
