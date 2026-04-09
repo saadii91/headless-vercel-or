@@ -46,6 +46,16 @@ export const HOME_SLIDES = [
 
 export const HOME_COLLECTIONS = [
   {
+    title: 'Perennials',
+    handle: 'perennials',
+    image: 'https://cdn11.bigcommerce.com/s-kss309bppi/images/stencil/original/image-manager/perennials-collection.jpg'
+  },
+  {
+    title: 'Shade Ferns',
+    handle: 'ferns',
+    image: 'https://cdn11.bigcommerce.com/s-kss309bppi/images/stencil/original/image-manager/ferns-collection-2-.jpg'
+  },
+  {
     title: 'Trees',
     handle: 'trees',
     image: 'https://cdn11.bigcommerce.com/s-kss309bppi/images/stencil/original/image-manager/trees-collection-new.jpg'
@@ -56,34 +66,14 @@ export const HOME_COLLECTIONS = [
     image: 'https://cdn11.bigcommerce.com/s-kss309bppi/images/stencil/original/image-manager/shrubs-collection.jpg'
   },
   {
-    title: 'Perennials',
-    handle: 'perennials',
-    image: 'https://cdn11.bigcommerce.com/s-kss309bppi/images/stencil/original/image-manager/perennials-collection.jpg'
-  },
-
-  {
-    title: 'Ferns',
-    handle: 'ferns',
-    image: 'https://cdn11.bigcommerce.com/s-kss309bppi/images/stencil/original/image-manager/ferns-collection-2-.jpg'
-  },
-  {
-    title: 'Live Stakes',
-    handle: 'live-stakes',
-    image: 'https://cdn11.bigcommerce.com/s-9nn6ejxj73/images/stencil/original/image-manager/livetakes-collection.jpg?t=1769041165'
-  },
-  {
     title: 'Moss',
     handle: 'moss',
     image: 'https://cdn11.bigcommerce.com/s-9nn6ejxj73/images/stencil/original/image-manager/moss-collection.jpg?t=1769041167'
-  },
-  {
-    title: 'Tree Seedlings',
-    handle: 'seedlings',
-    image: 'https://cdn11.bigcommerce.com/s-9nn6ejxj73/images/stencil/original/image-manager/seedling-collection.jpg?t=1769041170'
   },
   {
     title: 'Vines',
     handle: 'groundcover',
     image: 'https://cdn11.bigcommerce.com/s-9nn6ejxj73/images/stencil/original/image-manager/vines-collection.jpg?t=1769041176'
   }
+
 ];

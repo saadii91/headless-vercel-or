@@ -21,14 +21,14 @@ export default async function FeaturedProducts({ productIds }: { productIds: num
     if (!products.length) return null;
 
     return (
-        <section className="w-full bg-white pb-8">
+        <section className="w-full bg-white pb-8 px-4">
             <div className="py-5 md:py-10">
-                <h3 className="text-center text-2xl md:text-4xl font-black uppercase tracking-tighter text-[#285e2c]">
+                <h2 className="text-center text-2xl md:text-4xl font-black uppercase tracking-tighter text-[#285e2c]">
                     Featured Products
-                </h3>
+                </h2>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 px-2 lg:grid-cols-4 lg:gap-2">
+            <div className="mx-auto max-w-[1550px] grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
                 {products.map((product) => (
                     <Link
                         key={product.id}
